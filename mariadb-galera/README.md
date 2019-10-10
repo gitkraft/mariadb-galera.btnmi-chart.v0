@@ -58,11 +58,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the MariaDB Galera chart and their default values.
 
-|              Parameter               |                   Description                                                                                                                               |                              Default                              |
+|              Parameter               |                                                                         Description                                                                         |                              Default                              |
 |--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `global.imageRegistry`               | Global Docker image registry                                                                                                                                | `nil`                                                             |
 | `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                                                                             | `[]` (does not add image pull secrets to deployed pods)           |
-| `global.storageClass`                     | Global storage class for dynamic provisioning                                               | `nil`                                                        |
+| `global.storageClass`                | Global storage class for dynamic provisioning                                                                                                               | `nil`                                                             |
 | `image.registry`                     | MariaDB Galera image registry                                                                                                                               | `docker.io`                                                       |
 | `image.repository`                   | MariaDB Galera Image name                                                                                                                                   | `bitnami/mariadb-galera`                                          |
 | `image.tag`                          | MariaDB Galera Image tag                                                                                                                                    | `{TAG_NAME}`                                                      |
@@ -79,6 +79,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `service.loadBalancerIP`             | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                          | `nil`                                                             |
 | `service.loadBalancerSourceRanges`   | Address that are allowed when svc is `LoadBalancer`                                                                                                         | `[]`                                                              |
 | `service.annotations`                | Additional annotations for MariaDB Galera service                                                                                                           | `{}`                                                              |
+| `clusterDomain`                      | Kubernetes DNS Domain name to use                                                                                                                           | `cluster.local`                                                   |
 | `serviceAccount.create`              | Specify whether a ServiceAccount should be created                                                                                                          | `false`                                                           |
 | `serviceAccount.name`                | The name of the ServiceAccount to create                                                                                                                    | Generated using the mariadb-galera.fullname template              |
 | `rbac.create`                        | Specify whether RBAC resources should be created and used                                                                                                   | `false`                                                           |
@@ -127,7 +128,7 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                             | `nil`                                                             |
 | `persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                              | `[ReadWriteOnce]`                                                 |
 | `persistence.size`                   | Persistent Volume Size                                                                                                                                      | `8Gi`                                                             |
-| `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `nil`                                                             |
+| `extraInitContainers`                | Additional init containers (this value is evaluated as a template)                                                                                          | `[]`                                                              |
 | `extraContainers`                    | Additional containers (this value is evaluated as a template)                                                                                               | `[]`                                                              |
 | `resources`                          | CPU/Memory resource requests/limits for node                                                                                                                | `{}`                                                              |
 | `livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                                              | `true`                                                            |
@@ -270,7 +271,7 @@ The chart mounts a [Persistent Volume](kubernetes.io/docs/user-guide/persistent-
 The feature allows for specifying a template string for a initContainer in the pod. Usecases include situations when you need some pre-run setup. For example, in IKS (IBM Cloud Kubernetes Service), non-root users do not have write permission on the volume mount path for NFS-powered file storage. So, you could use a initcontainer to `chown` the mount. See a example below, where we add an initContainer on the pod that reports to an external resource that the db is going to starting.
 `values.yaml`
 ```yaml
-extraInitContainers: |
+extraInitContainers:
 - name: initcontainer
   image: bitnami/minideb:stretch
   command: ["/bin/sh", "-c"]
