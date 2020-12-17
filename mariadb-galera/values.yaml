@@ -190,7 +190,7 @@ galera:
   ## Bootstraping options
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
   bootstrap:
-    ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
+    ## Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node
     ##
     bootstrapFromNode:
     ## Force safe_to_bootstrap in grastate.date file.
@@ -402,7 +402,12 @@ replicaCount: 3
 updateStrategy:
   type: RollingUpdate
 
-## Additional pod annotations for MariaDB Galera pods
+## Additional labels for MariaDB Galera pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Additional annotations for MariaDB Galera pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -491,11 +496,6 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
-
-## Additional pod labels
-##
-# podLabels:
-#   extraLabel: extraValue
 
 ## Priority Class Name
 #
